@@ -4,6 +4,8 @@ import com.internet.shop.lib.Injector;
 import com.internet.shop.model.Product;
 import com.internet.shop.service.ProductService;
 
+import java.math.BigDecimal;
+
 public class Application {
     private static Injector injector = Injector.getInstance("com.internet.shop");
     private static final Long TROUSERS_ID = 2L;
@@ -19,7 +21,7 @@ public class Application {
         }
         System.out.println("Changing price of trousers:");
         Product trousersProduct = productService.get(TROUSERS_ID);
-        trousersProduct.setPrice(599.99);
+        trousersProduct.setPrice(new BigDecimal("599.99"));
         productService.update(trousersProduct);
         System.out.println(productService.get(TROUSERS_ID));
 
