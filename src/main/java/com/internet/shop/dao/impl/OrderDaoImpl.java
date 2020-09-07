@@ -5,6 +5,8 @@ import com.internet.shop.db.Storage;
 import com.internet.shop.lib.Dao;
 import com.internet.shop.model.Order;
 import com.internet.shop.model.ShoppingCart;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,6 +18,7 @@ public class OrderDaoImpl implements OrderDao {
     public Order completeOrder(ShoppingCart shoppingCart) {
         Order order = new Order(shoppingCart.getUserId());
         Storage.addOrder(order);
+        shoppingCart.setProducts(new ArrayList<>());
         return order;
     }
 
