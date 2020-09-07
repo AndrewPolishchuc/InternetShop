@@ -4,7 +4,6 @@ import com.internet.shop.model.Order;
 import com.internet.shop.model.Product;
 import com.internet.shop.model.ShoppingCart;
 import com.internet.shop.model.User;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class Storage {
     public static void addProduct(Product product) {
         productId++;
         product.setId(productId);
-        products.add(product);;
+        products.add(product);
     }
 
     public static void addOrder(Order order) {
