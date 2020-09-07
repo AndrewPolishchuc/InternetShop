@@ -36,6 +36,15 @@ public class User {
         return password;
     }
 
+    @Override
+    public String toString() {
+        return "User{"
+                + "name='" + name + '\''
+                + ", login='" + login + '\''
+                + ", password='" + password + '\''
+                + '}';
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
