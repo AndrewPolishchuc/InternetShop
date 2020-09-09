@@ -45,7 +45,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>allProducts</servlet-name>
-        <servlet-class>com.internet.shop.controllers.ProductController</servlet-class>
+        <servlet-class>com.internet.shop.controllers.GetAllProductController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>allProducts</servlet-name>
@@ -53,7 +53,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>buyProduct</servlet-name>
-        <servlet-class>com.internet.shop.controllers.CartProductAddController</servlet-class>
+        <servlet-class>com.internet.shop.controllers.AddProductToCartController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>buyProduct</servlet-name>
@@ -69,7 +69,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>addProduct</servlet-name>
-        <servlet-class>com.internet.shop.controllers.ProductAddController</servlet-class>
+        <servlet-class>com.internet.shop.controllers.AddProductController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>addProduct</servlet-name>

@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ProductAddController extends HttpServlet {
-    private static final Injector INJECTOR = Injector.getInstance("com.internet.shop");
+public class AddProductController extends HttpServlet {
+    private static final Injector injector = Injector.getInstance("com.internet.shop");
     private final ProductService productService =
-            (ProductService) INJECTOR.getInstance(ProductService.class);
+            (ProductService) injector.getInstance(ProductService.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

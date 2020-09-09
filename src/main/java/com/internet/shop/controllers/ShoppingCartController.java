@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 public class ShoppingCartController extends HttpServlet {
     private static final long USER_ID = 1;
-    private static final Injector INJECTOR = Injector.getInstance("com.internet.shop");
+    private static final Injector injector = Injector.getInstance("com.internet.shop");
     private ShoppingCartService shoppingCartService
-                = (ShoppingCartService) INJECTOR.getInstance(ShoppingCartService.class);
+                = (ShoppingCartService) injector.getInstance(ShoppingCartService.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
