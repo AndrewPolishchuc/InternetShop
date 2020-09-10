@@ -32,7 +32,7 @@
     </tr>
 </c:forEach>
 </table>
-<a href="${pageContext.request.contextPath}/user/all">All user</a><br>
+<a href="${pageContext.request.contextPath}/user/all">All users</a><br>
 <a href="${pageContext.request.contextPath}/cart">Shopping cart</a><br>
 <a href="${pageContext.request.contextPath}/">Home page</a><br>
 <a href="${pageContext.request.contextPath}/product/add">Add product</a><br>
