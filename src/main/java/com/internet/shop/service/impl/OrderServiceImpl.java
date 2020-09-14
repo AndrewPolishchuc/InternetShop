@@ -4,9 +4,11 @@ import com.internet.shop.dao.OrderDao;
 import com.internet.shop.lib.Inject;
 import com.internet.shop.lib.Service;
 import com.internet.shop.model.Order;
+import com.internet.shop.model.Product;
 import com.internet.shop.model.ShoppingCart;
 import com.internet.shop.service.OrderService;
 import com.internet.shop.service.ShoppingCartService;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -43,5 +45,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean delete(Long id) {
         return orderDao.deleteById(id);
+    }
+
+    @Override
+    public BigDecimal findSum(Long orderId) {
+        return get(orderId).getProducts().stream()
+                .map(Product::getPrice)
+                .reduce(BigDecimal.valueOf(0), BigDecimal::add);
     }
 }

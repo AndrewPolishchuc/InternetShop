@@ -9,7 +9,6 @@
 <a href="${pageContext.request.contextPath}/registration">Sign up</a><br>
 <a href="${pageContext.request.contextPath}/user/all">All users</a><br>
 <a href="${pageContext.request.contextPath}/product/all">All products</a><br>
-<a href="${pageContext.request.contextPath}/product/add">Add product</a><br>
 <a href="${pageContext.request.contextPath}/cart">Shopping cart</a><br>
 </body>
 </html>
