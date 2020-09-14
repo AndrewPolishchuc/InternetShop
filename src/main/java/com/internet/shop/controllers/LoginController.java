@@ -4,13 +4,12 @@ import com.internet.shop.exception.AuthenticationException;
 import com.internet.shop.lib.Injector;
 import com.internet.shop.model.User;
 import com.internet.shop.security.AuthenticationService;
-
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 public class LoginController extends HttpServlet {
     public static final String USER_ID = "user_id";
