@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class CompleteCurrentOrderController extends HttpServlet {
+    private static final long USER_ID = 1L;
     private static final Injector injector = Injector.getInstance("com.internet.shop");
     private OrderService orderService
             = (OrderService) injector.getInstance(OrderService.class);
@@ -20,8 +21,7 @@ public class CompleteCurrentOrderController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        Long cartId = Long.valueOf(req.getParameter("cartId"));
-        Order order = orderService.completeOrder(shoppingCartService.getById(cartId));
+        Order order = orderService.completeOrder(shoppingCartService.getByUserId(USER_ID));
         resp.sendRedirect(req.getContextPath() + "/user/orders");
     }
 }

@@ -19,7 +19,7 @@
                 <c:out value="${order.products}"/>
             </td>
             <td>
-                <form action="${pageContext.request.contextPath}/user/order/detail" method="get">
+                <form action="${pageContext.request.contextPath}/user/order/details" method="get">
                     <input type="hidden" name="orderId" value="${order.id}">
                     <button type="submit">Details</button>
                 </form>

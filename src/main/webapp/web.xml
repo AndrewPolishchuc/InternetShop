@@ -105,7 +105,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>detailOfOrder</servlet-name>
-        <url-pattern>/user/order/detail</url-pattern>
+        <url-pattern>/user/order/details</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>deleteOrder</servlet-name>
