@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class UserLoginControlFilter implements Filter {
+    private static final String USER_ID = "user_id";
     private static final Injector injector = Injector.getInstance("com.internet.shop");
     private final UserService userService = (UserService) injector.getInstance(UserService.class);
 
@@ -28,6 +29,17 @@ public class UserLoginControlFilter implements Filter {
                          FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
+        String url = req.getServletPath();
+        if (url.equals("/login") || url.equals("/registration")) {
+            filterChain.doFilter(req, resp);
+            return;
+        }
+        Long userId = (Long) req.getSession().getAttribute(USER_ID);
+        if (userId == null || userService.get(userId) == null) {
+            resp.sendRedirect("/login");
+            return;
+        }
+        filterChain.doFilter(req, resp);
     }
 
     @Override
