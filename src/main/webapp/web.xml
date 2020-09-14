@@ -85,7 +85,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>getAllOrders</servlet-name>
-        <servlet-class>com.internet.shop.controllers.GetOrderController</servlet-class>
+        <servlet-class>com.internet.shop.controllers.GetAllOrdersController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>getAllOrders</servlet-name>
@@ -101,7 +101,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>detailOfOrder</servlet-name>
-        <servlet-class>com.internet.shop.controllers.GetDetailOfOrder</servlet-class>
+        <servlet-class>com.internet.shop.controllers.GetOrderDetailsController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>detailOfOrder</servlet-name>

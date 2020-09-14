@@ -4,13 +4,13 @@ import com.internet.shop.lib.Injector;
 import com.internet.shop.model.Order;
 import com.internet.shop.service.OrderService;
 import java.io.IOException;
-import java.util.List;
+import java.math.BigDecimal;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GetOrderController extends HttpServlet {
+public class GetOrderDetailsController extends HttpServlet {
     private static final Injector injector = Injector.getInstance("com.internet.shop");
     private OrderService orderService
             = (OrderService) injector.getInstance(OrderService.class);
@@ -18,9 +18,12 @@ public class GetOrderController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        List<Order> orderList;
-        orderList = orderService.getAll();
-        req.setAttribute("allOrders", orderList);
-        req.getRequestDispatcher("/WEB-INF/views/order/allOrders.jsp").forward(req, resp);
+        Long orderId = Long.valueOf(req.getParameter("orderId"));
+        Order order = orderService.get(orderId);
+        req.setAttribute("order", order);
+        BigDecimal currentSum = orderService.findSum(orderId);
+        req.setAttribute("currentSum", currentSum);
+        req.getRequestDispatcher("/WEB-INF/views/order/detail.jsp").forward(req, resp);
     }
+
 }
