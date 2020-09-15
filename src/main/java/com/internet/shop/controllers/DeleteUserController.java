@@ -19,7 +19,7 @@ public class DeleteUserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        Long userId = Long.valueOf(req.getParameter(AddProductToCartController.USER_ID));
+        Long userId = Long.valueOf(req.getParameter(LoginController.USER_ID));
         userService.delete(userId);
         ShoppingCart shoppingCart = shoppingCartService.getByUserId(userId);
         shoppingCartService.delete(shoppingCart);
