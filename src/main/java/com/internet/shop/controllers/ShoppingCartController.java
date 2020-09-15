@@ -19,7 +19,7 @@ public class ShoppingCartController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        Long userId = (Long) req.getSession().getAttribute("user_id");
+        Long userId = (Long) req.getSession().getAttribute(AddProductToCartController.USER_ID);
         ShoppingCart currentShoppingCart = shoppingCartService.getByUserId(userId);
         List<Product> products = currentShoppingCart.getProducts();
         req.setAttribute("allProducts", products);
