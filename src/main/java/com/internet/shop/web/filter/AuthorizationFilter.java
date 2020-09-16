@@ -45,7 +45,7 @@ public class AuthorizationFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         String requestedUrl = req.getServletPath();
-        if (protectedUrls.get(requestedUrl) == null) {
+        if (!protectedUrls.containsKey(requestedUrl)) {
             filterChain.doFilter(req, resp);
             return;
         }
