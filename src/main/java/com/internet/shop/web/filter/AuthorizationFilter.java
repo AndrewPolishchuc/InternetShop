@@ -25,18 +25,19 @@ public class AuthorizationFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        protectedUrls.put("/user/all",List.of(Role.RoleName.ADMIN));
-        protectedUrls.put("/orders/all",List.of(Role.RoleName.ADMIN));
-        protectedUrls.put("/product/add",List.of(Role.RoleName.ADMIN));
-        protectedUrls.put("/user/delete",List.of(Role.RoleName.ADMIN));
-        protectedUrls.put("/admin/product/all",List.of(Role.RoleName.ADMIN));
-        protectedUrls.put("/product/buy",List.of(Role.RoleName.USER));
-        protectedUrls.put("/cart",List.of(Role.RoleName.USER));
-        protectedUrls.put("/cart/delete",List.of(Role.RoleName.USER));
-        protectedUrls.put("/order/complete",List.of(Role.RoleName.USER));
-        protectedUrls.put("/user/order/details",List.of(Role.RoleName.USER));
-        protectedUrls.put("/order/delete",List.of(Role.RoleName.USER));
-        protectedUrls.put("/user/orders",List.of(Role.RoleName.USER));
+        protectedUrls.put("/user/all", List.of(Role.RoleName.ADMIN));
+        protectedUrls.put("/orders/all", List.of(Role.RoleName.ADMIN));
+        protectedUrls.put("/product/add", List.of(Role.RoleName.ADMIN));
+        protectedUrls.put("/user/delete", List.of(Role.RoleName.ADMIN));
+        protectedUrls.put("/admin/product/all", List.of(Role.RoleName.ADMIN));
+        protectedUrls.put("/order/delete", List.of(Role.RoleName.ADMIN));
+        protectedUrls.put("/product/delete", List.of(Role.RoleName.ADMIN));
+        protectedUrls.put("/product/buy", List.of(Role.RoleName.USER));
+        protectedUrls.put("/cart", List.of(Role.RoleName.USER));
+        protectedUrls.put("/cart/delete", List.of(Role.RoleName.USER, Role.RoleName.ADMIN));
+        protectedUrls.put("/order/complete", List.of(Role.RoleName.USER));
+        protectedUrls.put("/user/order/details", List.of(Role.RoleName.USER));
+        protectedUrls.put("/user/orders", List.of(Role.RoleName.USER));
     }
 
     @Override
