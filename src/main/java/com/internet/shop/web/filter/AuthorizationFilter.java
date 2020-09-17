@@ -34,9 +34,9 @@ public class AuthorizationFilter implements Filter {
         protectedUrls.put("/product/delete", List.of(Role.RoleName.ADMIN));
         protectedUrls.put("/product/buy", List.of(Role.RoleName.USER));
         protectedUrls.put("/cart", List.of(Role.RoleName.USER));
-        protectedUrls.put("/cart/delete", List.of(Role.RoleName.USER, Role.RoleName.ADMIN));
+        protectedUrls.put("/cart/delete", List.of(Role.RoleName.USER));
         protectedUrls.put("/order/complete", List.of(Role.RoleName.USER));
-        protectedUrls.put("/user/order/details", List.of(Role.RoleName.USER));
+        protectedUrls.put("/user/order/details", List.of(Role.RoleName.USER, Role.RoleName.ADMIN));
         protectedUrls.put("/user/orders", List.of(Role.RoleName.USER));
     }
 
@@ -61,6 +61,7 @@ public class AuthorizationFilter implements Filter {
 
     @Override
     public void destroy() {
+
     }
 
     private boolean isAuthorized(User user, List<Role.RoleName> authorizedRoles) {
