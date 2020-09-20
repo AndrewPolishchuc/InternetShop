@@ -1,7 +1,6 @@
 package com.internet.shop.controllers;
 
 import com.internet.shop.lib.Injector;
-import com.internet.shop.model.Product;
 import com.internet.shop.model.Role;
 import com.internet.shop.model.User;
 import com.internet.shop.service.ProductService;

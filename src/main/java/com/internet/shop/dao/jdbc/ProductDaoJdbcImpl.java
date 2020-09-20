@@ -5,8 +5,11 @@ import com.internet.shop.lib.Dao;
 import com.internet.shop.model.Product;
 import com.internet.shop.util.ConnectionUtil;
 import java.math.BigDecimal;
-import java.sql.*;
-import java.text.DecimalFormat;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +39,7 @@ public class ProductDaoJdbcImpl implements ProductDao {
     @Override
     public Optional<Product> getById(Long item) {
         String exceptionMessage = "Can`t get product with id - " + item;
-        try(Connection connection = ConnectionUtil.getConnection()) {
+        try (Connection connection = ConnectionUtil.getConnection()) {
             String query = "SELECT * FROM products WHERE product_id = ? AND deleted != 1";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1, item);
@@ -89,10 +92,10 @@ public class ProductDaoJdbcImpl implements ProductDao {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Long product_id = resultSet.getLong("product_id");
+                Long productId = resultSet.getLong("product_id");
                 String name = resultSet.getString("name");
                 BigDecimal price = resultSet.getBigDecimal("price");
-                products.add(new Product(product_id, name, price));
+                products.add(new Product(productId, name, price));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Exceptional receipt of all products", e);
