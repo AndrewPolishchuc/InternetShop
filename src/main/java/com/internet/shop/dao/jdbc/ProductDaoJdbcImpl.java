@@ -45,10 +45,7 @@ public class ProductDaoJdbcImpl implements ProductDao {
             preparedStatement.setLong(1, item);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                long productId = resultSet.getLong("product_id");
-                String name = resultSet.getString("name");
-                BigDecimal price = resultSet.getBigDecimal("price");
-                return Optional.of(new Product(productId, name, price));
+                return Optional.of(getNewProduct(resultSet));
             }
             throw new RuntimeException(exceptionMessage);
         } catch (SQLException e) {
@@ -92,14 +89,18 @@ public class ProductDaoJdbcImpl implements ProductDao {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Long productId = resultSet.getLong("product_id");
-                String name = resultSet.getString("name");
-                BigDecimal price = resultSet.getBigDecimal("price");
-                products.add(new Product(productId, name, price));
+                products.add(getNewProduct(resultSet));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Exceptional receipt of all products", e);
         }
         return products;
+    }
+
+    private Product getNewProduct(ResultSet resultSet) throws SQLException {
+        Long productId = resultSet.getLong("product_id");
+        String name = resultSet.getString("name");
+        BigDecimal price = resultSet.getBigDecimal("price");
+        return new Product(productId, name, price);
     }
 }
