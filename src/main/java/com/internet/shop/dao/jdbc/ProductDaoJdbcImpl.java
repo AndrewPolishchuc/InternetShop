@@ -92,6 +92,7 @@ public class ProductDaoJdbcImpl implements ProductDao {
                 products.add(getNewProduct(resultSet));
             }
         } catch (SQLException e) {
+            System.out.println("Travis test");
             throw new RuntimeException("Exceptional receipt of all products", e);
         }
         return products;
