@@ -1,6 +1,7 @@
 package com.internet.shop.dao.jdbc;
 
 import com.internet.shop.dao.ProductDao;
+import com.internet.shop.exception.DataProcessingException;
 import com.internet.shop.lib.Dao;
 import com.internet.shop.model.Product;
 import com.internet.shop.util.ConnectionUtil;
@@ -32,40 +33,40 @@ public class ProductDaoJdbcImpl implements ProductDao {
             }
             return item;
         } catch (SQLException e) {
-            throw new RuntimeException("Product " + item + " was not created", e);
+            throw new DataProcessingException("Product " + item + " was not created", e);
         }
     }
 
     @Override
     public Optional<Product> getById(Long item) {
-        String exceptionMessage = "Can`t get product with id - " + item;
         try (Connection connection = ConnectionUtil.getConnection()) {
-            String query = "SELECT * FROM products WHERE product_id = ? AND deleted != 1";
+            String query = "SELECT * FROM products WHERE product_id = ? AND deleted = FALSE";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1, item);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return Optional.of(getNewProduct(resultSet));
             }
-            throw new RuntimeException(exceptionMessage);
+            return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException(exceptionMessage);
+            throw new DataProcessingException("Can`t get product with id - " + item, e);
         }
     }
 
     @Override
     public Product update(Product item) {
         try (Connection connection = ConnectionUtil.getConnection()) {
-            String query = "UPDATE products SET name = ?, price = ? WHERE product_id = ?";
+            String query = "UPDATE products SET name = ?, price = ? WHERE product_id = ? " +
+                    "AND deleted = FALSE";
             PreparedStatement preparedStatement
-                    = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                    = connection.prepareStatement(query);
             preparedStatement.setString(1, item.getName());
             preparedStatement.setBigDecimal(2, item.getPrice());
             preparedStatement.setLong(3, item.getId());
             preparedStatement.executeUpdate();
             return item;
         } catch (SQLException e) {
-            throw new RuntimeException("Product " + item + " has not been updated", e);
+            throw new DataProcessingException("Product " + item + " has not been updated", e);
         }
     }
 
@@ -77,7 +78,8 @@ public class ProductDaoJdbcImpl implements ProductDao {
             preparedStatement.setLong(1, item);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            throw new RuntimeException("Product with id - " + item + " has not been deleted");
+            throw new DataProcessingException("Product with id - " + item
+                    + " has not been deleted", e);
         }
     }
 
@@ -92,7 +94,7 @@ public class ProductDaoJdbcImpl implements ProductDao {
                 products.add(getNewProduct(resultSet));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Exceptional receipt of all products", e);
+            throw new DataProcessingException("Exceptional receipt of all products", e);
         }
         return products;
     }

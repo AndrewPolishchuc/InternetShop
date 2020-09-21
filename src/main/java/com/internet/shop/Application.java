@@ -10,11 +10,11 @@ public class Application {
         Product orange = new Product("orange",180);
         Product pineapple = new Product("pineapple",300);
         System.out.println(dao.getAll());
-        //System.out.println(dao.deleteById(1L));
+        System.out.println(dao.deleteById(1L));
         System.out.println(dao.getById(13L));
         System.out.println(dao.getById(2L));
-        //dao.create(orange);
-        //dao.create(pineapple);
+        dao.create(orange);
+        dao.create(pineapple);
         System.out.println(dao.getAll());
     }
 }

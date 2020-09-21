@@ -4,8 +4,7 @@ CREATE TABLE `internet_shop`.`products` (
   `product_id` BIGINT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(225) NOT NULL,
   `price` DECIMAL(17,2) NOT NULL,
-  PRIMARY KEY (`product_id`),
-  UNIQUE INDEX `productscol_UNIQUE` (`name` ASC) VISIBLE);
+  PRIMARY KEY (`product_id`);
 
 INSERT INTO `internet_shop`.`products` (`name`, `price`) VALUES ('banana', '200');
 INSERT INTO `internet_shop`.`products` (`name`, `price`) VALUES ('apple', '150');
