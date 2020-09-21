@@ -28,7 +28,7 @@ public class ProductDaoJdbcImpl implements ProductDao {
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
-                item.setId(resultSet.getLong("product_id"));
+                item.setId(resultSet.getLong(1));
             }
             return item;
         } catch (SQLException e) {
