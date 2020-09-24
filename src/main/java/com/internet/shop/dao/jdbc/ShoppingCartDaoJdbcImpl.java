@@ -34,7 +34,7 @@ public class ShoppingCartDaoJdbcImpl implements ShoppingCartDao {
                     + userId, e);
         }
         if (shoppingCart != null) {
-            shoppingCart.setProducts(getProductFromShoppingCart(shoppingCart.getId()));
+            shoppingCart.setProducts(getProductsFromShoppingCart(shoppingCart.getId()));
         }
         return Optional.ofNullable(shoppingCart);
     }
@@ -73,7 +73,7 @@ public class ShoppingCartDaoJdbcImpl implements ShoppingCartDao {
                     + " with ID = " + cartId, e);
         }
         if (shoppingCart != null) {
-            shoppingCart.setProducts(getProductFromShoppingCart(shoppingCart.getId()));
+            shoppingCart.setProducts(getProductsFromShoppingCart(shoppingCart.getId()));
         }
         return Optional.ofNullable(shoppingCart);
     }
@@ -89,7 +89,7 @@ public class ShoppingCartDaoJdbcImpl implements ShoppingCartDao {
             throw new DataProcessingException("Unable to update a buyer card due to the inability"
                     + "to delete the old version - " + shoppingCart, e);
         }
-        productInsert(shoppingCart);
+        insertProducts(shoppingCart);
         return shoppingCart;
     }
 
@@ -120,7 +120,7 @@ public class ShoppingCartDaoJdbcImpl implements ShoppingCartDao {
             throw new DataProcessingException("Can't get all shopping carts", e);
         }
         for (ShoppingCart shoppingCart : shoppingCarts) {
-            shoppingCart.setProducts(getProductFromShoppingCart(shoppingCart.getId()));
+            shoppingCart.setProducts(getProductsFromShoppingCart(shoppingCart.getId()));
         }
         return shoppingCarts;
     }
@@ -131,7 +131,7 @@ public class ShoppingCartDaoJdbcImpl implements ShoppingCartDao {
         return new ShoppingCart(cartId, userId);
     }
 
-    private List<Product> getProductFromShoppingCart(Long shoppingCartId) {
+    private List<Product> getProductsFromShoppingCart(Long shoppingCartId) {
         String query = "SELECT * FROM products p "
                 + "INNER JOIN shopping_carts_products cp ON p.product_id = "
                 + "cp.product_id WHERE cp.cart_id = ?;";
@@ -153,7 +153,7 @@ public class ShoppingCartDaoJdbcImpl implements ShoppingCartDao {
         }
     }
 
-    private ShoppingCart productInsert(ShoppingCart shoppingCart) {
+    private ShoppingCart insertProducts(ShoppingCart shoppingCart) {
         String query = "INSERT INTO "
                 + "shopping_carts_products(cart_id, product_id) VALUES(?, ?);";
         try (Connection connection = ConnectionUtil.getConnection();

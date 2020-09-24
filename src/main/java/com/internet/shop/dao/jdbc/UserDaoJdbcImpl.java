@@ -97,7 +97,6 @@ public class UserDaoJdbcImpl implements UserDao {
         }
         deleteRoles(user.getId());
         defineRoles(user);
-        user.setRoles(getRolesOfUser(user.getId()));
         return user;
     }
 
