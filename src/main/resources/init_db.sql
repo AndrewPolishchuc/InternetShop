@@ -105,3 +105,8 @@ CREATE TABLE `internet_shop`.`orders_products` (
     REFERENCES `internet_shop`.`products` (`product_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
+
+INSERT INTO `internet_shop`.`roles`(role_name)VALUES
+('USER'),
+('ADMIN');
