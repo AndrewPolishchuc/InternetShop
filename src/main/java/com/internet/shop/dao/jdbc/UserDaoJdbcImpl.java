@@ -167,12 +167,12 @@ public class UserDaoJdbcImpl implements UserDao {
     }
 
     private User defineRoles(User user) {
-        String queryToUpdateRoles = "INSERT  INTO users_roles(user_id, role_id) "
+        String query = "INSERT  INTO users_roles(user_id, role_id) "
                 + "VALUES(?,(SELECT role_id "
                 + "FROM roles "
                 + "WHERE role_name = ?)); ";
         try (Connection connection = ConnectionUtil.getConnection();
-                PreparedStatement statement = connection.prepareStatement(queryToUpdateRoles)) {
+                PreparedStatement statement = connection.prepareStatement(query)) {
             for (Role role : user.getRoles()) {
                 statement.setLong(1, user.getId());
                 statement.setString(2, role.getRoleName().name());
@@ -186,10 +186,10 @@ public class UserDaoJdbcImpl implements UserDao {
     }
 
     private boolean deleteRoles(Long userId) {
-        String queryToDeleteRoles = "DELETE FROM users_roles "
+        String query = "DELETE FROM users_roles "
                 + "WHERE user_id = ?;";
         try (Connection connection = ConnectionUtil.getConnection();
-                PreparedStatement statement = connection.prepareStatement(queryToDeleteRoles)) {
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, userId);
             return statement.executeUpdate() == 1;
         } catch (SQLException e) {
