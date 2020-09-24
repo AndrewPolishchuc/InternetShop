@@ -38,75 +38,75 @@ public class UserDaoJdbcImpl implements UserDao {
     }
 
     @Override
-    public User create(User item) {
+    public User create(User user) {
         String query = "INSERT INTO users(name, login, password) VALUES(?, ?, ?)";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query,
                         Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, item.getName());
-            statement.setString(2, item.getLogin());
-            statement.setString(3, item.getPassword());
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getLogin());
+            statement.setString(3, user.getPassword());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
-                item.setId(resultSet.getLong(1));
+                user.setId(resultSet.getLong(1));
             }
         } catch (SQLException e) {
-            throw new DataProcessingException("Unable to create user " + item, e);
+            throw new DataProcessingException("Unable to create user " + user, e);
         }
-        return defineRoles(item);
+        return defineRoles(user);
     }
 
     @Override
-    public Optional<User> getById(Long item) {
+    public Optional<User> getById(Long userId) {
         User user = null;
         String query = "SELECT * FROM users "
                 + "INNER JOIN users_roles ON users.user_id = users_roles.user_id "
                 + "WHERE users.deleted = false AND users.user_id = ?;";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setLong(1, item);
+            statement.setLong(1, userId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 user = getUserFromResultSet(resultSet);
             }
         } catch (SQLException e) {
-            throw new DataProcessingException("Unable to create user with ID " + item, e);
+            throw new DataProcessingException("Unable to create user with ID " + userId, e);
         }
         user.setRoles(getRolesOfUser(user.getId()));
         return Optional.ofNullable(user);
     }
 
     @Override
-    public User update(User item) {
+    public User update(User user) {
         String query = "UPDATE users SET name = ?, login = ?, password = ? "
                 + "WHERE user_id = ? AND deleted = FALSE;";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, item.getName());
-            statement.setString(2, item.getLogin());
-            statement.setString(3, item.getPassword());
-            statement.setLong(4, item.getId());
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getLogin());
+            statement.setString(3, user.getPassword());
+            statement.setLong(4, user.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new DataProcessingException("Unable to create user " + item, e);
+            throw new DataProcessingException("Unable to create user " + user, e);
         }
-        deleteRoles(item.getId());
-        defineRoles(item);
-        item.setRoles(getRolesOfUser(item.getId()));
-        return item;
+        deleteRoles(user.getId());
+        defineRoles(user);
+        user.setRoles(getRolesOfUser(user.getId()));
+        return user;
     }
 
     @Override
-    public boolean deleteById(Long item) {
+    public boolean deleteById(Long userId) {
         String query = "UPDATE users SET deleted = TRUE "
                 + "WHERE user_id = ?";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setLong(1, item);
+            statement.setLong(1, userId);
             return statement.executeUpdate() == 1;
         } catch (SQLException e) {
-            throw new DataProcessingException("Unable to delete user( id = " + item + ")", e);
+            throw new DataProcessingException("Unable to delete user( id = " + userId + ")", e);
         }
     }
 

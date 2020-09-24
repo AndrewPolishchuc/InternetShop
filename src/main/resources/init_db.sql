@@ -95,7 +95,7 @@ CREATE TABLE `internet_shop`.`orders_products` (
   PRIMARY KEY (`id`),
   INDEX `order_id_OP_idx` (`order_id` ASC) VISIBLE,
   INDEX `product_id_OP_idx` (`product_id` ASC) VISIBLE,
-  CONSTRAINT `order_id_OP`
+  CONSTRAINT `+`
     FOREIGN KEY (`order_id`)
     REFERENCES `internet_shop`.`orders` (`order_id`)
     ON DELETE NO ACTION

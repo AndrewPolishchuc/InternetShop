@@ -38,67 +38,67 @@ public class ShoppingCartDaoJdbcImpl implements ShoppingCartDao {
     }
 
     @Override
-    public ShoppingCart create(ShoppingCart item) {
+    public ShoppingCart create(ShoppingCart shoppingCart) {
         String query = "INSERT INTO shopping_carts(user_id) VALUES (?);";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(
                         query, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setLong(1, item.getUserId());
+            statement.setLong(1, shoppingCart.getUserId());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
-                item.setId(resultSet.getLong(1));
+                shoppingCart.setId(resultSet.getLong(1));
             }
-            return item;
+            return shoppingCart;
         } catch (SQLException e) {
-            throw new DataProcessingException("Unable to create " + item, e);
+            throw new DataProcessingException("Unable to create " + shoppingCart, e);
         }
     }
 
     @Override
-    public Optional<ShoppingCart> getById(Long item) {
+    public Optional<ShoppingCart> getById(Long cartId) {
         ShoppingCart shoppingCart = null;
         String query = "SELECT * FROM shopping_carts WHERE cart_id = ?;";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setLong(1, item);
+            statement.setLong(1, cartId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 shoppingCart = getShoppingCartFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             throw new DataProcessingException("it is impossible to get a buyer's card"
-                    + " with ID = " + item, e);
+                    + " with ID = " + cartId, e);
         }
         shoppingCart.setProducts(getProductFromShoppingCart(shoppingCart.getId()));
         return Optional.ofNullable(shoppingCart);
     }
 
     @Override
-    public ShoppingCart update(ShoppingCart item) {
+    public ShoppingCart update(ShoppingCart shoppingCart) {
         String queryToDeleteProducts = "DELETE FROM shopping_carts_products WHERE cart_id = ?;";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(queryToDeleteProducts)) {
-            statement.setLong(1, item.getId());
+            statement.setLong(1, shoppingCart.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DataProcessingException("Unable to update a buyer card due to the inability"
-                    + "to delete the old version - " + item, e);
+                    + "to delete the old version - " + shoppingCart, e);
         }
-        productInsert(item);
-        return item;
+        productInsert(shoppingCart);
+        return shoppingCart;
     }
 
     @Override
-    public boolean deleteById(Long item) {
+    public boolean deleteById(Long cartId) {
         String query = "UPDATE shopping_carts SET deleted = true WHERE cart_id = ?;";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setLong(1, item);
+            statement.setLong(1, cartId);
             return statement.executeUpdate() == 1;
         } catch (SQLException e) {
-            throw new DataProcessingException("It is impossible to delete the buyer's card" + item,
-                    e);
+            throw new DataProcessingException("It is impossible to delete the buyer's card"
+                    + cartId, e);
         }
     }
 
@@ -150,19 +150,20 @@ public class ShoppingCartDaoJdbcImpl implements ShoppingCartDao {
         }
     }
 
-    private ShoppingCart productInsert(ShoppingCart item) {
+    private ShoppingCart productInsert(ShoppingCart shoppingCart) {
         String query = "INSERT INTO "
                 + "shopping_carts_products(cart_id, product_id) VALUES(?, ?);";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setLong(1, item.getId());
-            for (Product product : item.getProducts()) {
+            statement.setLong(1, shoppingCart.getId());
+            for (Product product : shoppingCart.getProducts()) {
                 statement.setLong(2, product.getId());
                 statement.executeUpdate();
             }
-            return item;
+            return shoppingCart;
         } catch (SQLException e) {
-            throw new DataProcessingException("Unable to update the buyer's card " + item, e);
+            throw new DataProcessingException("Unable to update the buyer's card "
+                    + shoppingCart, e);
         }
     }
 }

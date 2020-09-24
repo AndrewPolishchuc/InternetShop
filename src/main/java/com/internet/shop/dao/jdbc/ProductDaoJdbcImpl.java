@@ -19,66 +19,66 @@ import java.util.Optional;
 public class ProductDaoJdbcImpl implements ProductDao {
 
     @Override
-    public Product create(Product item) {
+    public Product create(Product product) {
         try (Connection connection = ConnectionUtil.getConnection()) {
             String query = "INSERT INTO products(name, price) VALUES(?, ?)";
             PreparedStatement preparedStatement
                     = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, item.getName());
-            preparedStatement.setBigDecimal(2, item.getPrice());
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setBigDecimal(2, product.getPrice());
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
-                item.setId(resultSet.getLong(1));
+                product.setId(resultSet.getLong(1));
             }
-            return item;
+            return product;
         } catch (SQLException e) {
-            throw new DataProcessingException("Product " + item + " was not created", e);
+            throw new DataProcessingException("Product " + product + " was not created", e);
         }
     }
 
     @Override
-    public Optional<Product> getById(Long item) {
+    public Optional<Product> getById(Long productId) {
         try (Connection connection = ConnectionUtil.getConnection()) {
             String query = "SELECT * FROM products WHERE product_id = ? AND deleted = FALSE";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setLong(1, item);
+            preparedStatement.setLong(1, productId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return Optional.of(getNewProduct(resultSet));
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new DataProcessingException("Can`t get product with id - " + item, e);
+            throw new DataProcessingException("Can`t get product with id - " + productId, e);
         }
     }
 
     @Override
-    public Product update(Product item) {
+    public Product update(Product product) {
         try (Connection connection = ConnectionUtil.getConnection()) {
             String query = "UPDATE products SET name = ?, price = ? WHERE product_id = ? "
                     + "AND deleted = FALSE";
             PreparedStatement preparedStatement
                     = connection.prepareStatement(query);
-            preparedStatement.setString(1, item.getName());
-            preparedStatement.setBigDecimal(2, item.getPrice());
-            preparedStatement.setLong(3, item.getId());
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setBigDecimal(2, product.getPrice());
+            preparedStatement.setLong(3, product.getId());
             preparedStatement.executeUpdate();
-            return item;
+            return product;
         } catch (SQLException e) {
-            throw new DataProcessingException("Product " + item + " has not been updated", e);
+            throw new DataProcessingException("Product " + product + " has not been updated", e);
         }
     }
 
     @Override
-    public boolean deleteById(Long item) {
+    public boolean deleteById(Long productId) {
         try (Connection connection = ConnectionUtil.getConnection()) {
             String query = "UPDATE products SET deleted = TRUE WHERE product_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setLong(1, item);
+            preparedStatement.setLong(1, productId);
             return preparedStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            throw new DataProcessingException("Product with id - " + item
+            throw new DataProcessingException("Product with id - " + productId
                     + " has not been deleted", e);
         }
     }
