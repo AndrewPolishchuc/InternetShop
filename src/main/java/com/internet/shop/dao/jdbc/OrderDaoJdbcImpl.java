@@ -31,7 +31,7 @@ public class OrderDaoJdbcImpl implements OrderDao {
             }
         } catch (SQLException e) {
             throw new DataProcessingException("Unable to find users( with id -" + userId
-                    + ") order" + userId, e);
+                    + ") orders" + userId, e);
         }
         for (Order order : orders) {
             order.setProducts(getProductFromOrder(order.getId()));
@@ -54,7 +54,7 @@ public class OrderDaoJdbcImpl implements OrderDao {
         } catch (SQLException e) {
             throw new DataProcessingException("Order - " + order + " creation failed", e);
         }
-        return productInsert(order);
+        return insertProduct(order);
     }
 
     @Override
@@ -71,7 +71,9 @@ public class OrderDaoJdbcImpl implements OrderDao {
         } catch (SQLException e) {
             throw new DataProcessingException("Can't get" + orderId + "order", e);
         }
-        order.setProducts(getProductFromOrder(order.getId()));
+        if (order != null) {
+            order.setProducts(getProductFromOrder(order.getId()));
+        }
         return Optional.ofNullable(order);
     }
 
@@ -85,7 +87,7 @@ public class OrderDaoJdbcImpl implements OrderDao {
         } catch (SQLException e) {
             throw new DataProcessingException("It is not possible to update the order " + order, e);
         }
-        return productInsert(order);
+        return insertProduct(order);
     }
 
     @Override
@@ -127,9 +129,9 @@ public class OrderDaoJdbcImpl implements OrderDao {
     }
 
     private List<Product> getProductFromOrder(Long orderId) {
-        String query = "SELECT * FROM products "
-                + "INNER JOIN orders_products ON products.product_id = orders_products.product_id "
-                + "WHERE orders_products.order_id = ?;";
+        String query = "SELECT * FROM products p "
+                + "INNER JOIN orders_products  op ON p.product_id = op.product_id "
+                + "WHERE op.order_id = ?;";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, orderId);
@@ -147,7 +149,7 @@ public class OrderDaoJdbcImpl implements OrderDao {
         }
     }
 
-    private Order productInsert(Order order) {
+    private Order insertProduct(Order order) {
         String queryToUpdateProducts = "INSERT INTO orders_products(order_id, product_id) "
                 + "VALUES(?,?);";
         try (Connection connection = ConnectionUtil.getConnection();

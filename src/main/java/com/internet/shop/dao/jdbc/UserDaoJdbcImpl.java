@@ -33,7 +33,9 @@ public class UserDaoJdbcImpl implements UserDao {
         } catch (SQLException e) {
             throw new DataProcessingException("Can not get user from DB with login = " + login, e);
         }
-        user.setRoles(getRolesOfUser(user.getId()));
+        if (user != null) {
+            user.setRoles(getRolesOfUser(user.getId()));
+        }
         return Optional.ofNullable(user);
     }
 
@@ -60,9 +62,9 @@ public class UserDaoJdbcImpl implements UserDao {
     @Override
     public Optional<User> getById(Long userId) {
         User user = null;
-        String query = "SELECT * FROM users "
-                + "INNER JOIN users_roles ON users.user_id = users_roles.user_id "
-                + "WHERE users.deleted = false AND users.user_id = ?;";
+        String query = "SELECT * FROM users u "
+                + "INNER JOIN users_roles ur ON u.user_id = ur.user_id "
+                + "WHERE u.deleted = FALSE AND u.user_id = ?;";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, userId);
@@ -73,7 +75,9 @@ public class UserDaoJdbcImpl implements UserDao {
         } catch (SQLException e) {
             throw new DataProcessingException("Unable to create user with ID " + userId, e);
         }
-        user.setRoles(getRolesOfUser(user.getId()));
+        if (user != null) {
+            user.setRoles(getRolesOfUser(user.getId()));
+        }
         return Optional.ofNullable(user);
     }
 
@@ -113,9 +117,9 @@ public class UserDaoJdbcImpl implements UserDao {
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM users "
-                + "INNER JOIN users_roles ON users.user_id = users_roles.user_id "
-                + "WHERE users.deleted = false;";
+        String query = "SELECT * FROM users u "
+                + "INNER JOIN users_roles ur ON u.user_id = ur.user_id "
+                + "WHERE u.deleted = false;";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery();
@@ -133,9 +137,9 @@ public class UserDaoJdbcImpl implements UserDao {
     }
 
     private Set<Role> getRolesOfUser(Long userId) {
-        String query = "SELECT roles.role_id, role_name FROM roles "
-                + "INNER JOIN users_roles ON users_roles.role_id = roles.role_id "
-                + "WHERE users_roles.user_id = ?";
+        String query = "SELECT r.role_id, role_name FROM roles r "
+                + "INNER JOIN users_roles ur ON ur.role_id = r.role_id "
+                + "WHERE ur.user_id = ?";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, userId);
@@ -167,10 +171,8 @@ public class UserDaoJdbcImpl implements UserDao {
     }
 
     private User defineRoles(User user) {
-        String query = "INSERT  INTO users_roles(user_id, role_id) "
-                + "VALUES(?,(SELECT role_id "
-                + "FROM roles "
-                + "WHERE role_name = ?)); ";
+        String query = "INSERT INTO users_roles(user_id, role_id) "
+                + "VALUES(?,(SELECT role_id FROM roles WHERE role_name = ?));";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             for (Role role : user.getRoles()) {
