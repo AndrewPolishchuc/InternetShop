@@ -21,7 +21,7 @@ import java.util.Set;
 public class UserDaoJdbcImpl implements UserDao {
     @Override
     public Optional<User> findByLogin(String login) {
-        User user = new User();
+        User user = null;
         String query = "SELECT * FROM users WHERE deleted = false AND login = ?;";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
@@ -59,7 +59,7 @@ public class UserDaoJdbcImpl implements UserDao {
 
     @Override
     public Optional<User> getById(Long item) {
-        User user = new User();
+        User user = null;
         String query = "SELECT * FROM users "
                 + "INNER JOIN users_roles ON users.user_id = users_roles.user_id "
                 + "WHERE users.deleted = false AND users.user_id = ?;";
@@ -80,7 +80,7 @@ public class UserDaoJdbcImpl implements UserDao {
     @Override
     public User update(User item) {
         String query = "UPDATE users SET name = ?, login = ?, password = ? "
-                + "WHERE user_id = ?;";
+                + "WHERE user_id = ? AND deleted = FALSE;";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, item.getName());
@@ -99,7 +99,7 @@ public class UserDaoJdbcImpl implements UserDao {
 
     @Override
     public boolean deleteById(Long item) {
-        String query = "UPDATE users SET deleted = true "
+        String query = "UPDATE users SET deleted = TRUE "
                 + "WHERE user_id = ?";
         try (Connection connection = ConnectionUtil.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {

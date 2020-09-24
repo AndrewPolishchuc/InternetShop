@@ -19,7 +19,6 @@ public class ShoppingCart {
     }
 
     public ShoppingCart() {
-
     }
 
     public Long getId() {

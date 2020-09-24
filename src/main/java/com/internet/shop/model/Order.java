@@ -14,7 +14,6 @@ public class Order {
     }
 
     public Order() {
-
     }
 
     public Order(Long id, Long userId) {
