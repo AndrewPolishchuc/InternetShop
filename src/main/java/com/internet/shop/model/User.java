@@ -16,6 +16,14 @@ public class User {
         this.password = password;
     }
 
+    public User(Long id,String name,String login,String password, byte[] salt) {
+        this.id = id;
+        this.name = name;
+        this.login = login;
+        this.password = password;
+        this.salt = salt;
+    }
+
     public User(Long id,String name,String login,String password) {
         this.id = id;
         this.name = name;

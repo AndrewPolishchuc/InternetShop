@@ -160,7 +160,8 @@ public class UserDaoJdbcImpl implements UserDao {
         String name = resultSet.getString("name");
         String login = resultSet.getString("login");
         String password = resultSet.getString("password");
-        return new User(userId, name, login, password);
+        byte[] salt = resultSet.getBytes("salt");
+        return new User(userId, name, login, password, salt);
     }
 
     private Role getRole(ResultSet resultSet) throws SQLException {
