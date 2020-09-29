@@ -1,7 +1,6 @@
 package com.internet.shop.util;
 
 import com.internet.shop.exception.HashingException;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -13,7 +12,7 @@ public class HashUtil {
         SecureRandom secureRandom = new SecureRandom();
         byte[] salt = new byte[16];
         secureRandom.nextBytes(salt);
-        return  salt;
+        return salt;
     }
 
     public static String hashPassword(String password, byte[] salt) {
@@ -26,7 +25,7 @@ public class HashUtil {
                 hashedPassword.append(String.format("%02x", b));
             }
         } catch (NoSuchAlgorithmException e) {
-            throw new HashingException("Unable to hash password" ,e);
+            throw new HashingException("Unable to hash password", e);
         }
         return hashedPassword.toString();
     }

@@ -7,7 +7,6 @@ import com.internet.shop.model.User;
 import com.internet.shop.security.AuthenticationService;
 import com.internet.shop.service.UserService;
 import com.internet.shop.util.HashUtil;
-
 import java.util.Optional;
 
 @Service
