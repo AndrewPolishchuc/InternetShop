@@ -13,6 +13,14 @@ public class Order {
         this.userId = userId;
     }
 
+    public Order() {
+    }
+
+    public Order(Long id, Long userId) {
+        this.id = id;
+        this.userId = userId;
+    }
+
     public Long getId() {
         return id;
     }
